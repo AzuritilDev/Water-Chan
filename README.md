@@ -2,7 +2,7 @@
 
 ---
 
-[![GitHub repo](https://img.shields.io/badge/GitHub-AzuritilDev%2FWater-Chan-green.svg?style=plastic&logo=github)](https://github.com/AzuritilDev/Water-Chan)
+[![GitHub repo](https://img.shields.io/badge/GitHub-AzuritilDev%2FWaterChan-green.svg?style=plastic&logo=github)](https://github.com/AzuritilDev/Water-Chan)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/AzuritilDev/Water-Chan?color=green&label=Code%20Size&style=plastic&logo=github)](https://github.com/AzuritilDev/Water-Chan)
 [![GitHub license](https://img.shields.io/github/license/AzuritilDev/Water-Chan?color=green&logo=github&style=plastic&label=License)](https://github.com/AzuritilDev/Water-Chan)
 [![GitHub last commit](https://img.shields.io/github/last-commit/AzuritilDev/Water-Chan?color=green&logo=github&style=plastic&label=Last%20Commit)](https://github.com/AzuritilDev/Water-Chan)
