@@ -6,9 +6,9 @@ block_cipher = None
 
 a = Analysis(
     ['src\\main.py'],
-    pathex=[],
+    pathex=['.'],
     binaries=[],
-    datas=[('assets', 'assets')],
+    datas=[('assets', 'assets'), ('pyproject.toml', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

@@ -8,9 +8,9 @@ from datetime import datetime, timedelta
 from PIL import Image, ImageDraw
 from apscheduler.schedulers.background import BackgroundScheduler
 from notifypy import Notify
-from utils.ver import get_version
+from utils import ver
 
-__version__ = get_version("waterchan")
+__version__ = ver.get_version("waterchan")
 
 # Initializing the root here because I don't wanna deal with scope related bs
 root = tk.Tk()
@@ -87,6 +87,9 @@ def turn_on_reminder(name_entry):
     name = name_entry.get()
     # Don't forget to clean the entry label
     name_entry.delete(0, "end")
+
+    if name == "" or name == " ":
+        name = "Anon"
     
     # 1. Calculate a random execution time between 7:00 PM and 9:00 PM today
     now = datetime.now()
