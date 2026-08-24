@@ -109,6 +109,10 @@ uv venv
 ```bash
 source .venv/bin/activate
 ```
+## Contribution:
+Please see our [CONTRIBUTING markdown file](CONTRIBUTING.md).
+## Code of Conduct:
+Please see our [CODE OF CONDUCT markdown file](.github/CODE_OF_CONDUCT.md).
 ## Authors:
 [@AzuritilDev](https://github.com/AzuritilDev), The Maintainer (Contact: azuriteluadev@proton.me)
 ## License:
