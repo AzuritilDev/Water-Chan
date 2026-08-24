@@ -35,17 +35,80 @@ pip install pyinstaller
 -Lastly, run this command:
 
 (Windows)
-```bash
-pyinstaller --onefile --noconsole --paths=. --add-data "assets;assets" --add-data "pyproject;." src/main.py
+```bat
+pyinstaller --onefile --noconsole --name "Water-Chan" --icon "assets/waterchanicon_ico.ico" --paths=. --add-data "assets;assets" --add-data "pyproject;." src/main.py
 ```
 
 (Linux/MacOS)
 ```bash
-pyinstaller --onefile --noconsole --paths=. --add-data "assets:assets" --add-data "pyproject:." src/main.py
+pyinstaller --onefile --noconsole --name "Water-Chan" --icon "assets/waterchanicon_ico.ico" --paths=. --add-data "assets:assets" --add-data "pyproject:." src/main.py
 ```
 
 -**Note:** This app wasn't built for Linux nor MacOS and it may not run at all yet alone run properly in these operating systems.
 
+## Running the App
+To run the app without turning it into an `.exe` file, do the following:
+
+-Clone the repository by running:
+```bash
+git clone https://github.com/AzuritilDev/Water-Chan.git
+```
+
+-Change your directory into the cloned repository's directory:
+```bash
+cd water-chan
+```
+
+-Install dependencies:
+`pip`
+```bash
+pip install -r requirements.txt
+```
+
+`uv`
+```bash
+uv sync
+```
+
+-Run the program:
+
+1. `Without venv (virtual environment)`
+
+`python`
+```bash
+python -m src.main
+```
+or
+```bash
+python3 -m src.main
+```
+
+`python with uv`
+```bash
+uv run python -m src.main
+```
+
+2. `With venv (virtual environment)`
+
+`python`
+```bash
+python -m venv .venv
+```
+
+`python with uv`
+```bash
+uv venv
+```
+
+`Running the virtual environment (Windows)`
+```powershell
+.venv\Scripts\activate.bat
+```
+
+`Running the virtual environment (Linux/MacOS)`
+```bash
+source .venv/bin/activate
+```
 ## Authors:
 [@AzuritilDev](https://github.com/AzuritilDev), The Maintainer (Contact: azuriteluadev@proton.me)
 ## License:

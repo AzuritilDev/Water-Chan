@@ -8,7 +8,7 @@ a = Analysis(
     ['src\\main.py'],
     pathex=['.'],
     binaries=[],
-    datas=[('assets', 'assets'), ('pyproject.toml', '.')],
+    datas=[('assets', 'assets'), ('pyproject', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -28,7 +28,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='main',
+    name='Water-Chan',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -41,4 +41,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['assets\\waterchanicon_ico.ico'],
 )

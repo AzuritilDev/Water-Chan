@@ -40,4 +40,4 @@ def get_version(package_name: str) -> str:
     return "(An error occured while fetching the version.)"
 
 if __name__ == "__main__":
-    get_version("waterchan")
+    print(get_version("waterchan"))

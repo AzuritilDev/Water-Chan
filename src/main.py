@@ -10,14 +10,24 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from notifypy import Notify
 from utils import ver
 
+# Fetch the app version
 __version__ = ver.get_version("waterchan")
+
+# The main job ID that will be used for the reminder schedule
+primary_job_id = "reminder_job"
 
 # Initializing the root here because I don't wanna deal with scope related bs
 root = tk.Tk()
 
+# It would've probably been better if I used an "app" class to initialize the GUI but ehh
+turn_on_button : tk.Button = None
+
 # Initializing the scheduler globally so it persists in the background
 scheduler = BackgroundScheduler()
 scheduler.start()
+
+# Pystray icon that the app will use
+icon = None
 
 def resource_path(relative_path):
     """Get absolute path to resource"""
@@ -30,16 +40,27 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 def re_open_app():
+    """When fired, displays the hidden gui"""
     root.iconify()
+
+def alert_notification(app_name : str = "Water-Chan", 
+                       title : str = None, 
+                       message : str = None, 
+                       icon : str = resource_path(os.path.join("assets", "waterchanicon_png.png")),
+                       sound_effect : str = resource_path(os.path.join("assets", "notif.wav"))
+                       ):
+    notification = Notify()
+    notification.application_name = app_name
+    notification.title = title
+    notification.message = message
+    notification.icon = icon
+    notification.audio = sound_effect
+    notification.send()
 
 def trigger_reminder(name):
     """The event that fires when the scheduled reminder time arrives."""
-    notification = Notify()
-    notification.application_name = "Water-Chan App"
-    notification.title = f"Hey! {name}!"
-    notification.message = f"It's time to drink water, {name}"
-    notification.icon = resource_path(os.path.join("assets", "waterchanicon_png.png"))
-    notification.send()
+    alert_notification(title=f"Hey! {name}!", 
+                       message=f"It's time to drink water, {name}")
 
 def create_tray_icon():
     """
@@ -78,10 +99,17 @@ def run_tray_icon():
         title="Water Chan Reminder App",
         menu=pystray.Menu(
             pystray.MenuItem("Open App", re_open_app),
-            pystray.MenuItem("Quit Completely", quit_tray_app)
+            pystray.MenuItem("Quit Completely (Will Stop Reminder)", quit_tray_app)
         )
     )
     icon.run()
+
+    return icon
+
+def stop_tray_icon(icon):
+    """Stop running the tray icon"""
+    if icon != None:
+        icon.stop()
 
 def turn_on_reminder(name_entry):
     name = name_entry.get()
@@ -90,6 +118,24 @@ def turn_on_reminder(name_entry):
 
     if name == "" or name == " ":
         name = "Anon"
+
+    job_exists = scheduler.get_job(primary_job_id)
+    if job_exists:
+        scheduler.remove_job(primary_job_id)
+        # OFF - Let the user know the app has been turned off
+        turn_on_button.config(text="Turn On (7 PM - 9 PM)")
+
+        # Stop the tray icon from running
+        stop_tray_icon(icon=icon)
+
+        alert_notification(title=f"Reminder Removed!",
+                       message=f"Existing water drinking reminder removed.")
+        return
+        
+
+    # ON - Let the user know the app has been turned on
+    alert_notification(title=f"Reminder Set!",
+                       message=f"Water drinking reminder set for {name} between 7 PM - 9 PM")
     
     # 1. Calculate a random execution time between 7:00 PM and 9:00 PM today
     now = datetime.now()
@@ -108,13 +154,15 @@ def turn_on_reminder(name_entry):
     # 2. Schedule the background task using APScheduler
     scheduler.add_job(
         trigger_reminder, 
-        'date', 
+        "date", 
         run_date=target_time, 
         args=[name],
-        id='reminder_job'
+        id=primary_job_id
     )
+
+    turn_on_button.config(text="Turn Off")
     
-    # 3. "Close" the app frontend
+    # 3. "Close" the app frontend (Really it just hides it)
     root.withdraw()
     
     # 4. Offload the system tray icon to a separate background thread
@@ -138,11 +186,13 @@ tk.Label(root, text="Enter Your Name:").pack(pady=10)
 name_entry = tk.Entry(root, width=30)
 name_entry.pack(pady=5)
 
-tk.Button(
+turn_on_button = tk.Button(
     root, 
-    text="Remind me between 7 PM - 9 PM!", 
+    text="Turn On (7 PM - 9 PM)", 
     command=lambda: turn_on_reminder(name_entry),
     height=10
-).pack(pady=15)
+)
+
+turn_on_button.pack(pady=15)
 
 root.mainloop()
