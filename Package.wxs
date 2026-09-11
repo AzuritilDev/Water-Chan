@@ -8,7 +8,7 @@
            Scope="perMachine">
     
     <!-- Enforce a clean upgrade path when installing newer versions -->
-    <MajorUpgrade DowngradeErrorMessage="A newer version of WaterChan is already installed." />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of Water-Chan is already installed." />
 
     <!-- Core App Architecture Layout -->
     <StandardDirectory Id="ProgramFiles64Folder">
