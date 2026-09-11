@@ -32,7 +32,9 @@
           <Shortcut Id="StartMenuShortcut" 
                     Directory="ApplicationProgramsFolder" 
                     Name="Water-Chan" 
+                    Icon="AppIconReference.exe"
                     Advertise="yes" />
+                    
         </File>
       </Component>
     </ComponentGroup>
