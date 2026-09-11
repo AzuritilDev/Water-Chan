@@ -1,0 +1,55 @@
+name: CI/CD Build
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true # Automatically caches dependencies for faster runs
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Dependencies
+      run: |
+        uv pip install pyinstaller
+        uv sync --frozen --no-dev
+
+    - name: Build Executable with PyInstaller
+      run: |
+        uv run pyinstaller --onefile --noconsole --name "Water-Chan" --icon "assets/waterchanicon_ico.ico" --paths=. --add-data "assets;assets" --add-data "pyproject;." src/main.py
+      # Note: PyInstaller outputs the artifact into 'dist/Water-Chan.exe'
+
+    - name: Install WiX Toolset v4 via .NET CLI
+      run: |
+        dotnet tool install --global wix
+      # This fetches the platform-independent wix tool executable
+
+    - name: Compile MSI using WiX v4
+      run: |
+        wix build Package.wxs -arch x64 -o dist/WaterChanInstaller.msi
+      # WiX v4 combines compiler (candle) and linker (light) into a single command
+
+    - name: Upload PyInstaller EXE Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: raw-executable
+        path: dist/Water-Chan.exe
+
+    - name: Upload Finished MSI Installer Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-msi-installer
+        path: dist/WaterChanInstaller.msi
