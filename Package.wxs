@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <!-- WiX v4 uses Package as the root element instead of Product -->
+  <Package Name="WaterChan" 
+           Manufacturer="AzuritilDev" 
+           Version="1.0.0" 
+           UpgradeCode="D70FBB92-37B7-4724-A369-C0DF1F3D21DB"
+           Scope="perMachine">
+    
+    <!-- Enforce a clean upgrade path when installing newer versions -->
+    <MajorUpgrade DowngradeErrorMessage="A newer version of WaterChan is already installed." />
+
+    <!-- Core App Architecture Layout -->
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="AzuriteFolder" Name="AzuritilDev">
+        <Directory Id="INSTALLFOLDER" Name="WaterChan" />
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ApplicationProgramsFolder" Name="WaterChan"/>
+    </StandardDirectory>
+
+    <!-- Component Group referencing PyInstaller's output binary -->
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="MainExecutableComponent" Guid="*">
+        <!-- Source maps directly to the PyInstaller output directory -->
+        <File Id="MainEXE" Source="dist\WaterChan.exe" KeyPath="yes">
+          <!-- Creates a Start Menu shortcut on installation -->
+          <Shortcut Id="StartMenuShortcut" 
+                    Directory="ApplicationProgramsFolder" 
+                    Name="WaterChan" 
+                    Advertise="yes" />
+        </File>
+      </Component>
+    </ComponentGroup>
+
+    <!-- Feature telling Windows Installer to include the component group -->
+    <Feature Id="MainFeature" Title="WaterChan Installation" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+  </Package>
+</Wix>
