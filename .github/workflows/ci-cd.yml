@@ -35,7 +35,7 @@ jobs:
 
     - name: Install WiX Toolset v4 via .NET CLI
       run: |
-        dotnet tool install --global wix
+        dotnet tool install --global wix --version 4.0.6
       # This fetches the platform-independent wix tool executable
 
     - name: Compile MSI using WiX v4
