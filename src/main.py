@@ -29,6 +29,23 @@ scheduler.start()
 # Pystray icon that the app will use
 icon = None
 
+# The thread used for the tray icon
+tray_thread = None
+
+class StoppableThread(threading.Thread):
+    """Thread class with a stop() method. The thread itself has to check
+    regularly for the stopped() condition."""
+
+    def __init__(self,  *args, **kwargs):
+        super(StoppableThread, self).__init__(*args, **kwargs)
+        self._stop_event = threading.Event()
+
+    def stop(self):
+        self._stop_event.set()
+
+    def stopped(self):
+        return self._stop_event.is_set()
+
 def resource_path(relative_path):
     """Get absolute path to resource"""
     try:
@@ -82,16 +99,15 @@ def quit_tray_app(icon):
 
 def run_tray_icon():
     """Starts the system tray loop. This keeps the script alive in the background."""
+    global icon
+    
     try:
         icon_image = Image.open(resource_path(os.path.join("assets", "waterchanicon_ico.ico")))
     except:
         icon_image = create_tray_icon()
         """
         Ah, yes, let's just use the clanker generated **dev environment only** placeholder 
-        image and completely ignore the fact that we cannot access an asset which was
-        packaged WITH the application meaning there is a potential concern
-        that NONE of the assets are in the appdata directory we are searching resources
-        from.
+        image
         """
     icon = pystray.Icon(
         "Water Chan Reminder App",
@@ -104,12 +120,32 @@ def run_tray_icon():
     )
     icon.run()
 
-    return icon
+def start_tray_icon():
+    global tray_thread
 
-def stop_tray_icon(icon):
+    # Don't create another tray if one already exists
+    if tray_thread is not None and tray_thread.is_alive():
+        return
+
+    tray_thread = threading.Thread(
+        target=run_tray_icon,
+        daemon=True
+    )
+    tray_thread.start()
+
+def stop_tray_icon():
     """Stop running the tray icon"""
-    if icon != None:
+    global icon, tray_thread
+
+    if icon is not None:
         icon.stop()
+
+    # Wait briefly for the thread to actually terminate
+    if tray_thread is not None and tray_thread.is_alive():
+        tray_thread.join(timeout=1)
+
+    icon = None
+    tray_thread = None
 
 def turn_on_reminder(name_entry):
     name = name_entry.get()
@@ -126,7 +162,7 @@ def turn_on_reminder(name_entry):
         turn_on_button.config(text="Turn On (7 PM - 9 PM)")
 
         # Stop the tray icon from running
-        stop_tray_icon(icon=icon)
+        stop_tray_icon()
 
         alert_notification(title=f"Reminder Removed!",
                        message=f"Existing water drinking reminder removed.")
@@ -137,7 +173,7 @@ def turn_on_reminder(name_entry):
     alert_notification(title=f"Reminder Set!",
                        message=f"Water drinking reminder set for {name} between 7 PM - 9 PM")
     
-    # 1. Calculate a random execution time between 7:00 PM and 9:00 PM today
+    # Calculate a random execution time between 7:00 PM and 9:00 PM today
     now = datetime.now()
     start_window = now.replace(hour=19, minute=0, second=0, microsecond=0)
     end_window = now.replace(hour=21, minute=0, second=0, microsecond=0)
@@ -151,7 +187,7 @@ def turn_on_reminder(name_entry):
     if target_time < now:
         target_time += timedelta(days=1)
     
-    # 2. Schedule the background task using APScheduler
+    # Schedule the background task using APScheduler
     scheduler.add_job(
         trigger_reminder, 
         "date", 
@@ -162,13 +198,12 @@ def turn_on_reminder(name_entry):
 
     turn_on_button.config(text="Turn Off")
     
-    # 3. "Close" the app frontend (Really it just hides it)
+    # "Close" the app frontend (Really it just hides it)
     root.withdraw()
     
-    # 4. Offload the system tray icon to a separate background thread
+    # Offload the system tray icon to a separate background thread
     # This prevents pystray from blocking the main script cleanup execution
-    tray_thread = threading.Thread(target=run_tray_icon, daemon=True)
-    tray_thread.start()
+    start_tray_icon()
 
 # --- Tkinter GUI Setup ---
 root.title("Reminder App")
