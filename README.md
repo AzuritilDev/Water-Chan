@@ -36,12 +36,12 @@ pip install pyinstaller
 
 (Windows)
 ```bat
-pyinstaller --onefile --noconsole --name "Water-Chan" --icon "assets/waterchanicon_ico.ico" --paths=. --add-data "assets;assets" --add-data "pyproject;." src/main.py
+pyinstaller --onefile --noconsole --name "Water-Chan" --icon "assets/waterchanicon_ico.ico" --paths=. --add-data "assets;assets" --add-data "pyproject.toml;." src/main.py
 ```
 
 (Linux/MacOS)
 ```bash
-pyinstaller --onefile --noconsole --name "Water-Chan" --icon "assets/waterchanicon_ico.ico" --paths=. --add-data "assets:assets" --add-data "pyproject:." src/main.py
+pyinstaller --onefile --noconsole --name "Water-Chan" --icon "assets/waterchanicon_ico.ico" --paths=. --add-data "assets:assets" --add-data "pyproject.toml:." src/main.py
 ```
 
 -**Note:** This app wasn't built for Linux nor MacOS and it may not run at all yet alone run properly in these operating systems.

@@ -30,7 +30,7 @@ jobs:
 
     - name: Build Executable with PyInstaller
       run: |
-        pyinstaller --onefile --noconsole --name "Water-Chan" --icon "assets/waterchanicon_ico.ico" --paths=. --add-data "assets;assets" --add-data "pyproject;." src/main.py
+        pyinstaller --onefile --noconsole --name "Water-Chan" --icon "assets/waterchanicon_ico.ico" --paths=. --add-data "assets;assets" --add-data "pyproject.toml;." src/main.py
       # Note: PyInstaller outputs the artifact into 'dist/Water-Chan.exe'
 
     - name: Install WiX Toolset v4 via .NET CLI

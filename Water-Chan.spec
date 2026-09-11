@@ -8,7 +8,7 @@ a = Analysis(
     ['src\\main.py'],
     pathex=['.'],
     binaries=[],
-    datas=[('assets', 'assets'), ('pyproject', '.')],
+    datas=[('assets', 'assets'), ('pyproject.toml', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
