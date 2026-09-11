@@ -10,6 +10,8 @@
     <!-- Enforce a clean upgrade path when installing newer versions -->
     <MajorUpgrade DowngradeErrorMessage="A newer version of Water-Chan is already installed." />
 
+    <MediaTemplate EmbedCab="yes" />
+
     <!-- Core App Architecture Layout -->
     <StandardDirectory Id="ProgramFiles64Folder">
       <Directory Id="AzuriteFolder" Name="AzuritilDev">
