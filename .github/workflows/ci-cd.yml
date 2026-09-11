@@ -48,8 +48,12 @@ jobs:
         name: raw-executable
         path: dist/Water-Chan.exe
 
-    - name: Upload Finished MSI Installer Artifact
-      uses: actions/upload-artifact@v4
+     # Automatically attaches the assets directly to release
+    - name: Upload Assets to GitHub Release
+      uses: softprops/action-gh-release@v2
       with:
-        name: windows-msi-installer
-        path: dist/WaterChanInstaller.msi
+        files: |
+          dist/Water-Chan.exe
+          dist/WaterChanInstaller.msi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
