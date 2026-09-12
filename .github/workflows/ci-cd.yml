@@ -44,6 +44,7 @@ jobs:
 
     - name: Compile MSI using WiX v4
       run: |
+        wix extension add WixToolset.UI.wixext/4.0.6
         wix build Package.wxs -arch x64 -ext WixToolset.UI.wixext -d BuildVersion="${{ github.ref_name }}" -o dist/WaterChanInstaller.msi
       # WiX v4 combines compiler (candle) and linker (light) into a single command
 
