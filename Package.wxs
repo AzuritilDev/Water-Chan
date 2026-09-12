@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+  xmlns:ui="http://wixtoolset.org/ui">
   <!-- WiX v4 uses Package as the root element instead of Product -->
   <Package Name="Water-Chan" 
            Manufacturer="AzuritilDev" 
@@ -11,6 +12,12 @@
     <MajorUpgrade DowngradeErrorMessage="A newer version of Water-Chan is already installed." />
 
     <MediaTemplate EmbedCab="yes" />
+
+    <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+
+    <!-- Defining the icon, the ID ends with '.exe' to match the wanted binary shortcut type  -->
+    <Icon Id="AppIconReference.exe" SourceFile="app_icon.ico" />
 
     <!-- Core App Architecture Layout -->
     <StandardDirectory Id="ProgramFiles64Folder">
