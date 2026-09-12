@@ -3,7 +3,7 @@
   <!-- WiX v4 uses Package as the root element instead of Product -->
   <Package Name="Water-Chan" 
            Manufacturer="AzuritilDev" 
-           Version="1.0.0" 
+           Version="$(var.BuildVersion)" 
            UpgradeCode="D70FBB92-37B7-4724-A369-C0DF1F3D21DB"
            Scope="perMachine">
     
