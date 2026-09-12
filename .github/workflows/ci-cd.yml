@@ -28,14 +28,17 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install pyinstaller
-        pip install -r requirements.txt
+        # python -m pip install --upgrade pip
+        # pip install pyinstaller
+        # pip install -r requirements.txt
+        uv pip install pyinstaller
+        uv pip install -r requirements.txt
 
     - name: Build Executable with PyInstaller
       run: |
-        pyinstaller --onefile --noconsole --name "Water-Chan" --icon "assets/waterchanicon_ico.ico" --paths=. --add-data "assets;assets" --add-data "pyproject.toml;." src/main.py
-      # Note: PyInstaller outputs the artifact into 'dist/Water-Chan.exe'
+        # pyinstaller --onefile --noconsole --name "Water-Chan" --icon "assets/waterchanicon_ico.ico" --paths=. --add-data "assets;assets" --add-data "pyproject.toml;." src/main.py
+        uv run pyinstaller --onefile --noconsole --name "Water-Chan" --icon "assets/waterchanicon_ico.ico" --paths=. --add-data "assets;assets" --add-data "pyproject.toml;." src/main.py
+        # Note: PyInstaller outputs the artifact into 'dist/Water-Chan.exe'
 
     - name: Install WiX Toolset v4 via .NET CLI
       run: |
@@ -45,7 +48,7 @@ jobs:
     - name: Compile MSI using WiX v4
       run: |
         wix extension add WixToolset.UI.wixext/4.0.6
-        wix build Package.wxs -arch x64 -ext WixToolset.UI.wixext -d BuildVersion="${{ github.ref_name }}" -o dist/WaterChanInstaller.msi
+        wix build Package.wxs -arch x64 -ext .wix/extensions/WixToolset.UI.wixext/4.0.6/wixext4/WixToolset.UI.wixext.dll -d BuildVersion="${{ github.ref_name }}" -o dist/WaterChanInstaller.msi
       # WiX v4 combines compiler (candle) and linker (light) into a single command
 
     - name: Upload PyInstaller EXE Artifact

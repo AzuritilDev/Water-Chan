@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
-  xmlns:ui="http://wixtoolset.org/ui">
+     xmlns:ui="http://wixtoolset.org">
   <!-- WiX v4 uses Package as the root element instead of Product -->
   <Package Name="Water-Chan" 
            Manufacturer="AzuritilDev" 
